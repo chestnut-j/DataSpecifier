@@ -15,34 +15,34 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Input from 'ant-design-vue/lib/input';
+// import axios from 'axios';
+// import Input from 'ant-design-vue/lib/input';
 // import 'ant-design-vue/dist/antd.css';
 export default {
   name: 'OriginalData',
   data () {
     return {
-      originData:[],
+      originData: [],
       rawData: '',
       dataArray: []
     }
   },
   methods: {
-    getMessage() {
+    getMessage () {
     },
-    extractRelation() {
-        let arr = []
-        this.rawData.split('\n').forEach(item=>arr.push(`${item.trim()}`))
-        this.dataArray = arr;
-        // console.log(this.dataArray)
-        this.$emit('rawData',this.dataArray)
+    extractRelation () {
+      let arr = []
+      this.rawData.split('\n').forEach(item => arr.push(`${item.trim()}`))
+      this.dataArray = arr
+      // console.log(this.dataArray)
+      this.$emit('rawData', this.dataArray)
     }
   },
-  created() {
+  created () {
     // this.getMessage();
   },
-  mounted() {
-      this.getMessage();
+  mounted () {
+    this.getMessage()
   }
 }
 </script>
@@ -50,7 +50,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .origin-data-panel {
-    height: 400px;
+    height: 500px;
     width: 95%;
     border: 3px solid black;
     border-radius: 10px;
@@ -64,7 +64,7 @@ export default {
     padding-top: 5px;
 }
 .data-content {
-    height: 360px;
+    height: 480px;
     overflow: auto;
     text-align: left;
     /* padding-left: 20px; */
@@ -77,7 +77,7 @@ td {
     width: 50%;
 }
 .input-data {
-    height: 340px;
+    height: 440px;
     width: 95%;
     overflow: auto;
     text-align: left;

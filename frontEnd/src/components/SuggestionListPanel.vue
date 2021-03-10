@@ -1,21 +1,27 @@
 <template>
     <div class="panel">
-
+        <div class="header">Suggestion List</div>
     </div>
 </template>
-<script lang="ts">
-import { Vue} from 'vue-property-decorator';
-
-
-export default class SuggestionListPanel extends Vue {
-    
+<script>
+export default {
+  name: 'SuggestionListPanel',
+  data () {
+    return {
+      data: []
+    }
+  }
 }
-
-
-</script> 
+</script>
 
 <style scoped>
+.header {
+    padding: 20px;
+    font-size:20px;
+    text-align: center;
+}
 .panel {
-    height:100%
+    height:100%;
+    width:600px;
 }
 </style>

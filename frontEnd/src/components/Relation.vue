@@ -2,7 +2,9 @@
   <div class="relation-panel">
     <div class="sub-title">Relation</div>
     <div class="data-content">
-      <div  id="relation"></div>
+      <div  id="relation-content">
+        <!-- <hot-table  :settings="settings"  licenseKey='non-commercial-and-evaluation'/> -->
+      </div>
       <!-- {{relationData}} -->
       <!-- <tr v-for="item in relationData" :key="item">
           {{ item }}
@@ -10,43 +12,44 @@
     </div>
     <link href="https://cdn.jsdelivr.net/npm/handsontable@8.3.1/dist/handsontable.full.min.css" rel="stylesheet" media="screen">
   </div>
-  
+
 </template>
 
 <script>
-  
+
 import axios from 'axios'
-import Handsontable from "handsontable";
+import { HotTable } from '@handsontable/vue'
+import Handsontable from 'handsontable'
 // import '@handsontable/dist/handsontable.full.css'
 
-
 export default {
-  name: 'Realation',
+  name: 'Relation',
   data () {
     return {
-      relationData: []
+      relationData: [],
     }
   },
-  props:['rawData'],
+  components: {
+    HotTable
+  },
+  props: [ 'rawData' ],
   methods: {
-    getMessage() {
-      console.log('relation',this.rawData)
-      const path = 'http://127.0.0.1:5000/relation';
+    getMessage () {
+      console.log('relation', this.rawData)
+      const path = 'http://127.0.0.1:5000/relation'
       axios.get(path)
         .then((res) => {
-          this.relationData = res.data;
-          console.log(this.relationData) 
+          this.relationData = res.data
           this.showData();
         })
         .catch((error) => {
-           // eslint-disable-next-line
-          console.error(error);
-        });
-
+          // eslint-disable-next-line
+          console.error(error)
+        })
     },
-    showData() {
-      var container = document.getElementById('relation');
-      var hot = new Handsontable(container, {
+    showData () {
+      var container = document.getElementById('relation-content');
+      const hot = new Handsontable(container, {
         // startRows: 8,
         startCols: 15,
         width: "100%",
@@ -58,19 +61,16 @@ export default {
         filters: true,
         dropdownMenu: true,
         licenseKey: 'non-commercial-and-evaluation'
-      });
+      })
 
-    },
+    }
   },
-  created() {
-    // this.getMessage();
+  created () {
+    this.getMessage()
   },
-  mounted() {
-    this.getMessage();
+  mounted () {
+    this.getMessage()
     // this.showData();
-  },
-  watch: {
-    rawData(val) { this.getMessage() }
   }
 }
 </script>
@@ -78,12 +78,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .relation-panel {
-    height: 500px;
+    height: 620px;
     width: 95%;
     border: 3px solid black;
     border-radius: 10px;
     margin: 10px;
-    margin-top: 40px;
+    margin-top: 60px;
 }
 .sub-title {
     height: 30px;
@@ -93,7 +93,7 @@ export default {
     /* border-bottom: 1px solid black; */
 }
 .data-content {
-    height: 460px;    
+    height: 500px;
     overflow: auto;
     text-align: left;
     padding-left: 20px;

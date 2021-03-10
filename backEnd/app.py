@@ -7,6 +7,7 @@ from difflib import SequenceMatcher
 
 
 
+
 def preprocess_data(tree): 
     slist = []
     for sub in tree:
@@ -46,6 +47,7 @@ def get_origin_data():
 
 @app.route('/relation',methods=['GET', 'POST'])
 def data_extration():
+    nltk.download('averaged_perceptron_tagger')
     with open('./data/crime.csv', 'r') as f:
         reader = csv.reader(f)
 
@@ -71,7 +73,7 @@ def data_extration():
         sent = nltk.pos_tag(list1)
         
         tree = cp.parse(sent)
-        print(tree)
+        # print(tree)
 
         substr = preprocess_data(tree)
 
