@@ -2,22 +2,15 @@
   <div class="origin-data-panel">
     <div class="sub-title">originalData</div>
     <div class="data-content">
-        <!-- {{originData}} -->
-        <!-- <tr v-for="items in originData" :key="items">
-            <td v-for="item in items" :key="item">{{item}}</td>
-        </tr> -->
-        <!-- <textarea class="input-data" name="rawData" type="text"/> -->
-        <textarea  v-model="rawData" class="input-data"  placeholder="请输入源数据" />
-        <!-- <p>{{rawData}}</p> -->
-        <!-- <button @click="extractRelation">relation extraction</button> -->
+        <!-- <textarea  v-model="rawData" class="input-data"  placeholder="请输入源数据" /> -->
+        <a-textarea  class="input-data" placeholder="请输入源数据" :rows="4" />
     </div>
   </div>
 </template>
 
 <script>
 // import axios from 'axios';
-// import Input from 'ant-design-vue/lib/input';
-// import 'ant-design-vue/dist/antd.css';
+
 export default {
   name: 'OriginalData',
   data () {
@@ -77,7 +70,8 @@ td {
     width: 50%;
 }
 .input-data {
-    height: 440px;
+    margin-top:20px;
+    height: 420px;
     width: 95%;
     overflow: auto;
     text-align: left;

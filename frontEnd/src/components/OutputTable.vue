@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Handsontable from "handsontable"
+import Handsontable from 'handsontable'
 
 export default {
   name: 'OutputTable',
@@ -24,7 +24,8 @@ export default {
         data.push(['', '', '', '', '', '', '', '', '']) // 在声明二维
       }
       var container = document.getElementById('output-table')
-      var hot = new Handsontable(container, {
+      /* eslint-disable no-new */
+      new Handsontable(container, {
         data: data,
         startRows: 80,
         colWidths: 150,

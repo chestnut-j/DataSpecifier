@@ -7,9 +7,9 @@
     <div class="right-column">
       <outputTable></outputTable>
     </div>
-    <div class="suggestion-list" :style="{width:(suggestionListStatus?'800px':'20px')}">
+    <!-- <div class="suggestion-list" :style="{width:(suggestionListStatus?'800px':'20px')}">
       <suggestion-list-panel />
-    </div>
+    </div> -->
   </div>
 </template>
 
