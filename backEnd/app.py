@@ -47,7 +47,7 @@ def get_origin_data():
 
 @app.route('/relation',methods=['GET', 'POST'])
 def data_extration():
-    nltk.download('averaged_perceptron_tagger')
+    # nltk.download('averaged_perceptron_tagger')
     with open('./data/crime.csv', 'r') as f:
         reader = csv.reader(f)
 

@@ -1,6 +1,6 @@
 <template>
   <div class="origin-data-panel">
-    <div class="sub-title">originalData</div>
+    <div class="sub-title">Raw Data</div>
     <div class="data-content">
         <!-- <textarea  v-model="rawData" class="input-data"  placeholder="请输入源数据" /> -->
         <a-textarea  class="input-data" placeholder="请输入源数据" :rows="4" />

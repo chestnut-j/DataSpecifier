@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="title">
-      <h1 class="title-text">Data Specifier</h1>
+      <h1 class="title-text">Table-Lite</h1>
     </div>
     <router-view/>
   </div>
@@ -20,6 +20,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  z-index: 1;
   /* margin: 0; */
   /* margin-top: 60px; */
 }
@@ -27,7 +28,7 @@ export default {
   height: 60px;
   background: #202c38;
   font-size: 20px;
-  color: aliceblue;
+  color: rgb(251, 253, 255);
   text-align: left;
   padding-top: 1px;
   padding-left: 40px;
@@ -35,5 +36,7 @@ export default {
 }
 .title-text {
   margin-top: 4px;
+  color: rgb(251, 253, 255);
+  font-weight: bold;
 }
 </style>
