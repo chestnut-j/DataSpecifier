@@ -2,12 +2,20 @@
   <div class="table-panel">
     <div class="sub-title">Spreadsheet</div>
     <div id="output-table"></div>
+    <div class="preview" v-show="isHover">
+      <table>
+        <tr class="select-row" v-for="(item,index) in hoverData" :key="(item,index)">
+          <td class="select-col" v-for="(element,index) in item" :key="(element,index)">{{element}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
 <script>
 import Handsontable from 'handsontable'
 
+var data0 = []
 export default {
   name: 'OutputTable',
   data () {
@@ -17,14 +25,16 @@ export default {
       realData: [],
       hot: {},
       colIsFill: [],
-      rowIsFill: []
+      rowIsFill: [],
+      intervalId: null,
+      spreadData: this.$store.state.spreadData
     }
   },
-  props: [ 'data', 'endPos', 'dragIsEnd', 'isHover', 'hoverData', 'pos' ],
+  props: [ 'data', 'endPos', 'dragIsEnd', 'isHover', 'hoverData', 'pos', 'mappingPos', 'mappingData' ],
   methods: {
     initTable () {
       // var data0 = new Array('','','','','','','','','','')
-      var data0 = []
+
       for (var i = 0; i < 260; i++) { // 一维长度为10
         // data0.push(['1', '2', '3', '4', '5', '6', '7', '8', '9']) // 在声明二维
         data0.push(['', '', '', '', '', '', '', '', '']) // 在声明二维
@@ -47,6 +57,8 @@ export default {
         formulas: true,
         licenseKey: 'non-commercial-and-evaluation'
       })
+      this.$store.dispatch('setSpreadData', this.hot.getData())
+      this.$store.dispatch('addDataOperation', this.hot.getData())
     },
     fillData (row, col, data) {
       var i = row
@@ -59,7 +71,20 @@ export default {
         })
         i = i + 1
       })
+      // this.$store.dispatch('updateSpreadTable', this.hot)
+    },
+    dataRefreh () {
+      if (this.intervalId != null) {
+        return
+      }
+      // 计时器为空，操作
+      this.intervalId = setInterval(() => {
+        this.spreadData = this.$store.state.spreadData
+      }, 50)
     }
+  },
+  created () {
+    this.dataRefreh()
   },
   mounted () {
     this.initTable()
@@ -73,6 +98,11 @@ export default {
       // console.log(this.data[0], row, col)
 
       this.fillData(row, col, this.data[0])
+      this.$store.dispatch('setSpreadData', this.hot.getData())
+      this.$store.dispatch('addDataOperation', this.hot.getData())
+      const key = this.$store.state.historyOperations.length
+      const text = 'drag'
+      this.$store.dispatch('addOperation', {key: key, text: text})
       var isEmpty = true
       if ((this.colIsFill[col] && (!this.rowIsFill[row])) || ((!this.colIsFill[col]) && this.rowIsFill[row])) {
         isEmpty = false
@@ -82,25 +112,48 @@ export default {
       this.$emit('dragEnd', this.data[0], this.data0, isEmpty, {col: col, row: row})
       // this.hot.setDataAtCell(row, col, this.data[0][0][0])
     },
+    spreadData: {
+      handler (val) {
+        console.log('spreadData Change')
+        this.hot.loadData(this.$store.state.spreadData)
+        // this.$store.dispatch('addDataOperation', this.hot.getData())
+        // this.updateList()
+      },
+      deep: true
+    },
     // hoverData: function (val) {
     //   this.fillData(this.pos.row, this.pos.col, val)
     // },
+    mappingData: {
+      handler (val) {
+        console.log('mappingdata', this.mappingData)
+        if (this.mappingPos === 'body') {
+          this.fillData(1, 1, this.mappingData[0])
+        } else {
+          this.fillData(this.pos.row, this.pos.col, this.mappingData[0])
+        }
+        this.$store.dispatch('addDataOperation', this.hot.getData())
+        // this.updateList()
+      },
+      deep: true
+    },
     isHover: function (val) {
       // console.log(val)
-      if (val === false) {
-        // console.log(this.hoverData)
+      // if (val === false) {
+      //   // console.log(this.hoverData)
 
-        var length = this.hoverData.length - 1
-        if (length === 0) {
-          length = this.hoverData[0].length - 1
-        }
-        // console.log(length)
-        for (var i = 0; i < length; i++) {
-          this.hot.undo()
-        }
-      } else {
-        this.fillData(this.pos.row, this.pos.col, this.hoverData)
-      }
+      //   var length = this.hoverData.length - 1
+      //   if (length === 0) {
+      //     length = this.hoverData[0].length - 1
+      //   }
+      //   // console.log(length)
+      //   // for (var i = 0; i < length; i++) {
+      //   //   this.hot.undo()
+      //   // }
+      // } else {
+      //   // this.fillData(this.pos.row, this.pos.col, this.hoverData)
+      // }
+      // this.hot.data = data0
     }
   }
 }
@@ -133,5 +186,24 @@ export default {
   /* width: 98%; */
   overflow: auto;
   margin: 5px;
+}
+.select-row {
+  height: 16px;
+}
+.select-col {
+  width:150px;
+  border: 1px solid #eeeeee;
+}
+.preview {
+  z-index: 20000;
+  max-height: 1000px;
+  max-width: 800px;
+  float: left;
+  position: absolute;
+  top: 145px;
+  left: 950px;
+  overflow: hidden;
+  background: #d5e6fc;
+  opacity: 0.7;
 }
 </style>

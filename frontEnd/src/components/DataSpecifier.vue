@@ -2,7 +2,7 @@
   <div class="hello">
     <div class="left-column">
       <originalData @rawData='getRawData'></originalData>
-      <relation :rawData='rawData' @selectedData='showPanel' @openSuggestion="showDrawer" @getRelationData="getRelationData"></relation>
+      <relation :rawData='rawData' @selectedData='showPanel' @openSuggestion="showDrawer"></relation>
     </div>
     <div v-show="selectedPartIsShow" class="drag-panel" id="drag-panel">
       <!-- <a-card > -->
@@ -20,6 +20,8 @@
         :isHover='isHover'
         :hoverData="hoverData"
         :pos="pos"
+        :mappingPos="mappingPos"
+        :mappingData="mappingData"
         @dragEnd='setDragEnd'
       ></outputTable>
     </div>
@@ -43,6 +45,7 @@
         :spreadSheet='spreadSheet'
         :isEmpty="isEmpty"
         :pos="pos"
+        @mapping="getMappingData"
         @selectData="getSelectData"
         @hoverData="getHoverData"
         @cancelHoverData="cancelHoverData"
@@ -63,7 +66,7 @@ export default {
     return {
       visible: false,
       rawData: '',
-      relationData: [],
+      relationData: this.$store.state.relationData,
       selectData: [],
       spreadSheet: [],
       // msg: 'Welcome to Your Vue.js App'
@@ -76,7 +79,9 @@ export default {
       pos: {row: '', col: ''},
       isSelected: false,
       isHover: false,
-      hoverData: []
+      hoverData: [],
+      mappingData: [],
+      mappingPos: ''
     }
   },
   components: {
@@ -169,6 +174,10 @@ export default {
       this.spreadSheet = data2
       this.isEmpty = isEmpty
       this.pos = pos
+    },
+    getMappingData (data) {
+      this.mappingData = data.data
+      this.mappingPos = data.pos
     },
     getSelectData (data) {
       this.isSelected = true

@@ -58,6 +58,8 @@ export default {
           this.relationData = res.data
           this.showData()
           this.$store.dispatch('setRelationData', res.data)
+          this.getDataSet()
+          this.getOrganizations()
           console.log(this.$store.state.relationData)
           this.$emit('getRelationData', this.relationData)
         })
@@ -122,6 +124,192 @@ export default {
     },
     callback (key) {
       console.log(key)
+    },
+    getDataSet () {
+      // console.log('dataset', this.relationData)
+      // var s = new Set()
+      var dataSet = []
+      var dataCol = []
+      const colCount = this.relationData[0].length
+      for (var i = 0; i < colCount; i++) {
+        dataSet.push(new Set())
+        dataCol.push([])
+      }
+      this.relationData.forEach(item => {
+        item.forEach((element, index2) => {
+          dataSet[index2].add(element)
+          dataCol[index2].push(element)
+        })
+      })
+      console.log('dataSet', dataSet)
+      console.log('dataCol', dataCol)
+
+      this.$store.dispatch('setDataSet', dataSet)
+      this.$store.dispatch('setDataCol', dataCol)
+    },
+    getOrganizations () {
+      var org = []
+      // (A*B),()->(C) 0
+      org.push(this.$store.state.relationData)
+      // (),(A*B)->(C) 1
+      org.push(this.$store.state.dataCol)
+      // (A),(B)->(C) 2
+      var data = []
+      var colHead = this.$store.state.dataSet[1]
+      var rows = []
+      this.$store.state.dataSet[0].forEach(item => {
+        rows.push([item])
+      })
+
+      this.$store.state.dataCol[2].forEach((item, index) => {
+        var i = Math.floor(index / colHead.size)
+        rows[i].push(item)
+      })
+      var colArr = [...colHead]
+      colArr.unshift('')
+      data.push(colArr)
+      rows.forEach(item => {
+        data.push(item)
+      })
+      org.push(data)
+
+      // (B),(A)->(C) 3
+      var dataCol = []
+      const colCount = data[0].length
+      for (var i = 0; i < colCount; i++) {
+        dataCol.push([])
+      }
+      data.forEach(item => {
+        item.forEach((element, index) => {
+          dataCol[index].push(element)
+        })
+      })
+      org.push(dataCol)
+
+      // (A),()->() 4
+      data = []
+      colHead = this.$store.state.dataSet[1]
+      rows = []
+      this.$store.state.dataSet[0].forEach(item => {
+        rows.push([item])
+      })
+
+      this.$store.state.dataCol[2].forEach((item, index) => {
+        var i = Math.floor(index / colHead.size)
+        rows[i].push('')
+      })
+      // colArr = [...colHead]
+      // colArr.unshift('')
+      // data.push(colArr)
+      rows.forEach(item => {
+        data.push(item)
+      })
+      org.push(data)
+
+      // (),(A)->() 5
+      dataCol = []
+      for (i = 0; i < data[0].length; i++) {
+        dataCol.push([])
+      }
+      data.forEach(item => {
+        item.forEach((element, index) => {
+          dataCol[index].push(element)
+        })
+      })
+      org.push(dataCol)
+
+      // (B),()->() 6
+      data = []
+      colHead = this.$store.state.dataSet[0]
+      rows = []
+      this.$store.state.dataSet[1].forEach(item => {
+        rows.push([item])
+      })
+
+      this.$store.state.dataCol[2].forEach((item, index) => {
+        var i = Math.floor(index / colHead.size)
+        rows[i].push('')
+      })
+      // colArr = [...colHead]
+      // colArr.unshift('')
+      // data.push(colArr)
+      rows.forEach(item => {
+        data.push(item)
+      })
+      org.push(data)
+
+      // (),(B)->() 7
+      dataCol = []
+      for (i = 0; i < data[0].length; i++) {
+        dataCol.push([])
+      }
+      data.forEach(item => {
+        item.forEach((element, index) => {
+          dataCol[index].push(element)
+        })
+      })
+      org.push(dataCol)
+
+      // (A),(B)->() 8
+      data = []
+      colHead = this.$store.state.dataSet[1]
+      rows = []
+      this.$store.state.dataSet[0].forEach(item => {
+        rows.push([item])
+      })
+
+      this.$store.state.dataCol[2].forEach((item, index) => {
+        i = Math.floor(index / colHead.size)
+        rows[i].push('')
+      })
+      colArr = [...colHead]
+      colArr.unshift('')
+      data.push(colArr)
+      rows.forEach(item => {
+        data.push(item)
+      })
+      org.push(data)
+
+      // (B),(A)->() 9
+      dataCol = []
+      for (i = 0; i < data[0].length; i++) {
+        dataCol.push([])
+      }
+      data.forEach(item => {
+        item.forEach((element, index) => {
+          dataCol[index].push(element)
+        })
+      })
+      org.push(dataCol)
+
+      // (A*B),()->() 10
+      data = []
+      this.relationData.forEach((item, index) => {
+        data.push([])
+        for (i = 0; i < item.length; i++) {
+          if (i > 1) {
+            data[index].push('')
+          } else {
+            data[index].push(item[i])
+          }
+        }
+      })
+      org.push(data)
+
+      // (),(A*B)->() 11
+      dataCol = []
+      for (i = 0; i < data[0].length; i++) {
+        dataCol.push([])
+      }
+      data.forEach(item => {
+        item.forEach((element, index) => {
+          dataCol[index].push(element)
+        })
+      })
+      org.push(dataCol)
+
+      console.log('org', org)
+      this.$store.dispatch('setDataOrganization', org)
     },
     getSelectedRange () {
       this.select = this.hot.getSelected()

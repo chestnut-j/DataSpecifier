@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="title">
-      <h1 class="title-text">Table-Lite</h1>
+      <h1 class="title-text">Rigel</h1>
     </div>
     <router-view/>
   </div>
