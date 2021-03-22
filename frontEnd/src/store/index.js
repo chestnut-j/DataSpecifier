@@ -15,6 +15,7 @@ const state = {
   historySpreadData: [],
   historySuggestion: [],
   historyOperations: [],
+  historySpec: [{rowHeading: '', colHeading: '', body: ''}],
   spreadTable: {}
 }
 
@@ -59,10 +60,14 @@ const mutations = {
   changeOperation (state, data) {
     state.historyOperations.push(data)
   },
+  changeSpec (state, data) {
+    state.historySpec.push(data)
+  },
   lastOperation (state) {
     state.historyOperations.pop()
     state.historySpreadData.pop()
     state.historySuggestion.pop()
+    state.historySpec.pop()
     state.spreadData = state.historySpreadData[state.historySpreadData.length - 1]
   }
 }
@@ -104,6 +109,9 @@ const actions = {
   },
   addOperation (context, data) {
     context.commit('changeOperation', data)
+  },
+  addSpec (context, data) {
+    context.commit('changeSpec', data)
   },
   backOperation (context) {
     context.commit('lastOperation')

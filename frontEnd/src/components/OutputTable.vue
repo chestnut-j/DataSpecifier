@@ -55,7 +55,10 @@ export default {
         columnSorting: true,
         headerTooltips: true,
         formulas: true,
-        licenseKey: 'non-commercial-and-evaluation'
+        licenseKey: 'non-commercial-and-evaluation',
+        afterSetDataAtCell: () => {
+
+        }
       })
       this.$store.dispatch('setSpreadData', this.hot.getData())
       this.$store.dispatch('addDataOperation', this.hot.getData())

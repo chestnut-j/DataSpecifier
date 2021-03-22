@@ -6,21 +6,21 @@
           <div class="row-heading">
             <span>(</span>
             <span>
-              <a-input v-model="rowHeading"  style="width:60px"></a-input>
+              <a-input v-model="rowHeading"  style="width:60px" @pressEnter="onSpecChange"></a-input>
             </span>
             <span>) ,</span>
           </div>
           <div class="column-heading">
             <span>(</span>
             <span>
-              <a-input v-model="colHeading" style="width:60px"></a-input>
+              <a-input v-model="colHeading" style="width:60px" @pressEnter="onSpecChange"></a-input>
             </span>
             <span>) -></span>
           </div>
           <div class="body">
             <span>(</span>
             <span>
-              <a-input v-model="body"  style="width:60px"></a-input>
+              <a-input v-model="body"  style="width:60px" @pressEnter="onSpecChange"></a-input>
             </span>
             <span>)</span>
           </div>
@@ -152,6 +152,11 @@ export default {
     onChange (e) {
       console.log('radio checked', e.target.value)
     },
+    onSpecChange () {
+      if (this.body === '') {
+
+      }
+    },
     onMappingChange (e) {
       console.log('radio checked', e.target.value)
       const key = this.$store.state.historyOperations.length
@@ -209,7 +214,6 @@ export default {
           }
           break
         case 6:
-          console.log('enter 6')
           this.$store.dispatch('setSpreadData', this.$store.state.dataOrganization[0])
           this.$store.dispatch('addDataOperation', this.$store.state.dataOrganization[0])
           this.mappingOptions = []
@@ -224,6 +228,12 @@ export default {
           this.body = this.$store.state.colName[length]
           break
       }
+      var spec = {
+        rowHeading: this.rowHeading,
+        colHeading: this.colHeading,
+        body: this.body
+      }
+      this.$store.dispatch('addSpec', spec)
       this.$emit('cancelHoverData')
     },
     onSelectChange (e) {
@@ -251,11 +261,17 @@ export default {
           var data = this.selectionOptions[e.target.value - 1].data
           console.log(data)
           this.mappingData = data
-          this.$emit('selectData', data)
+          // this.$emit('selectData', data)
           break
         default:
           break
       }
+      var spec = {
+        rowHeading: this.rowHeading,
+        colHeading: this.colHeading,
+        body: this.body
+      }
+      this.$store.dispatch('addSpec', spec)
       this.$emit('selectData', data)
     },
     onOrganizationChange (e) {
@@ -322,6 +338,12 @@ export default {
         default:
           break
       }
+      var spec = {
+        rowHeading: this.rowHeading,
+        colHeading: this.colHeading,
+        body: this.body
+      }
+      this.$store.dispatch('addSpec', spec)
     },
     onPivotChange (e) {
       console.log('radio checked', e.target.value)
@@ -379,6 +401,9 @@ export default {
           }
           if (this.rowHeading === 'A' && this.colName === 'B' && this.colHeading === '') {
             hoverData = this.$store.state.dataOrganization[8]
+          }
+          if (this.rowHeading === '' && this.colName === 'B' && this.colHeading === 'A') {
+            hoverData = this.$store.state.dataOrganization[11]
           }
           break
         case 5:
@@ -580,6 +605,10 @@ export default {
     },
     backOperation () {
       this.$store.dispatch('backOperation')
+      console.log(this.$store.state.historySpec)
+      this.rowHeading = this.$store.state.historySpec[this.$store.state.historySpec.length - 1].rowHeading
+      this.colHeading = this.$store.state.historySpec[this.$store.state.historySpec.length - 1].colHeading
+      this.body = this.$store.state.historySpec[this.$store.state.historySpec.length - 1].body
     },
     dataRefreh () {
       if (this.intervalId != null) {
